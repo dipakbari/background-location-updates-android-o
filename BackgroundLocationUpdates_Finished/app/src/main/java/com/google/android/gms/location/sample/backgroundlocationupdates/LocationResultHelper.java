@@ -24,7 +24,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.preference.PreferenceManager;
-import android.support.v4.app.TaskStackBuilder;
+import androidx.core.app.TaskStackBuilder;
 import android.app.NotificationChannel;
 
 
@@ -50,11 +50,14 @@ class LocationResultHelper {
         mContext = context;
         mLocations = locations;
 
-        NotificationChannel channel = new NotificationChannel(PRIMARY_CHANNEL,
-                context.getString(R.string.default_channel), NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setLightColor(Color.GREEN);
-        channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-        getNotificationManager().createNotificationChannel(channel);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(PRIMARY_CHANNEL,
+                    context.getString(R.string.default_channel), NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setLightColor(Color.GREEN);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            getNotificationManager().createNotificationChannel(channel);
+        }
     }
 
     /**
@@ -135,14 +138,17 @@ class LocationResultHelper {
         PendingIntent notificationPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification.Builder notificationBuilder = new Notification.Builder(mContext,
-                PRIMARY_CHANNEL)
-                .setContentTitle(getLocationResultTitle())
-                .setContentText(getLocationResultText())
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setAutoCancel(true)
-                .setContentIntent(notificationPendingIntent);
 
-        getNotificationManager().notify(0, notificationBuilder.build());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            Notification.Builder  notificationBuilder = new Notification.Builder(mContext,
+                    PRIMARY_CHANNEL)
+                    .setContentTitle(getLocationResultTitle())
+                    .setContentText(getLocationResultText())
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setAutoCancel(true)
+                    .setContentIntent(notificationPendingIntent);
+
+            getNotificationManager().notify(0, notificationBuilder.build());
+        }
     }
 }

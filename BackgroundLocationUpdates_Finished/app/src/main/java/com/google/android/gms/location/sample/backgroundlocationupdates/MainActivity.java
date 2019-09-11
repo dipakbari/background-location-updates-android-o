@@ -22,15 +22,15 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 import android.Manifest;
 import android.widget.Button;
 import android.widget.TextView;
@@ -60,7 +60,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
     // FIXME: 5/16/17
-    private static final long UPDATE_INTERVAL = 10 * 1000;
+    private static final long UPDATE_INTERVAL = 60 * 1000;
 
     /**
      * The fastest rate for active location updates. Updates will never be more frequent
@@ -95,9 +95,9 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRequestUpdatesButton = (Button) findViewById(R.id.request_updates_button);
-        mRemoveUpdatesButton = (Button) findViewById(R.id.remove_updates_button);
-        mLocationUpdatesResultView = (TextView) findViewById(R.id.location_updates_result);
+        mRequestUpdatesButton = findViewById(R.id.request_updates_button);
+        mRemoveUpdatesButton = findViewById(R.id.remove_updates_button);
+        mLocationUpdatesResultView = findViewById(R.id.location_updates_result);
 
         // Check if the user revoked runtime permissions.
         if (!checkPermissions()) {
@@ -159,7 +159,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
 
     /**
      * Builds {@link GoogleApiClient}, enabling automatic lifecycle management using
-     * {@link GoogleApiClient.Builder#enableAutoManage(android.support.v4.app.FragmentActivity,
+     * {@link GoogleApiClient.Builder#enableAutoManage(FragmentActivity,
      * int, GoogleApiClient.OnConnectionFailedListener)}. I.e., GoogleApiClient connects in
      * {@link AppCompatActivity#onStart}, or if onStart() has already happened, it connects
      * immediately, and disconnects automatically in {@link AppCompatActivity#onStop}.
